@@ -2,7 +2,8 @@ module.exports = {
     env: {
         commonjs: true,
         es2021: true,
-        node: true
+        node: true,
+        'jest/globals': true
     },
     extends: [
         'standard'
@@ -12,5 +13,6 @@ module.exports = {
     },
     rules: {
         indent: ['error', 4]
-    }
+    },
+    plugins: ['jest']
 }
