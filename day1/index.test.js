@@ -18,3 +18,9 @@ test('basic test three-measurement sliding window', () => {
     const expected = 5
     expect(get3MeasurementSlidingWindow(input)).toBe(expected)
 })
+
+test('basic test three-measurement sliding window', () => {
+    const input = fs.readFileSync('input.txt', 'UTF-8').split('\n').map(Number)
+    const expected = 1822
+    expect(get3MeasurementSlidingWindow(input)).toBe(expected)
+})
