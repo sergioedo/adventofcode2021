@@ -1,0 +1,20 @@
+{
+  "name": "day1",
+  "version": "1.0.0",
+  "description": "--- Day 1: Sonar Sweep --- You're minding your own business on a ship at sea when the overboard alarm goes off! You rush to see if you can help. Apparently, one of the Elves tripped and accidentally sent the sleigh keys flying into the ocean!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "7.32.0",
+    "eslint-config-standard": "16.0.3",
+    "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "5.2.0",
+    "jest": "27.4.3"
+  }
+}
