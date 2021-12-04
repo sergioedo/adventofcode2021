@@ -25,32 +25,40 @@ const completedBoard = (board) => {
     return rowCompleted || colsCompleted
 }
 
-const playBingo = (game) => {
+const playGame = (game, endGame) => {
     const { numbers, boards } = parseGame(game)
     const initialState = {
         playedNumbers: [],
         boards: boards.map(board => board.map(row => row.map(value => ({ value, marked: false })))),
-        winnerBoard: null
+        winnerBoards: []
     }
 
     const gameResult = numbers.reduce((prevState, number) => {
-        if (prevState.winnerBoard) return prevState // game finished
+        if (endGame(prevState)) return prevState // game finished
         const updatedBoards = prevState.boards.map(board => markBoard(board, number))
-        const winnerBoard = updatedBoards.filter(completedBoard)
+        const winnerBoards = updatedBoards.filter(completedBoard)
 
         const newState = {
             playedNumbers: [...prevState.playedNumbers, number],
-            boards: updatedBoards,
-            winnerBoard: winnerBoard.length > 0 ? winnerBoard[0] : null
+            boards: updatedBoards.filter(board => !completedBoard(board)),
+            winnerBoards: [...winnerBoards, ...prevState.winnerBoards]
         }
         return newState
     }, initialState)
 
-    const { playedNumbers, winnerBoard } = gameResult
+    const { playedNumbers, winnerBoards } = gameResult
     const lastPlayedNumber = playedNumbers[playedNumbers.length - 1]
-    const sumUnMarkedNumbers = winnerBoard.map(row => row.filter(number => !number.marked)).flat().reduce((acc, number) => acc + number.value, 0)
+    const sumUnMarkedNumbers = winnerBoards[0].map(row => row.filter(number => !number.marked)).flat().reduce((acc, number) => acc + number.value, 0)
 
     return lastPlayedNumber * sumUnMarkedNumbers
 }
 
-module.exports = { playBingo }
+const playBingo = (game) => {
+    return playGame(game, state => state.winnerBoards.length === 1)
+}
+
+const lastBingoWinner = (game) => {
+    return playGame(game, state => state.boards.length === 0)
+}
+
+module.exports = { playBingo, lastBingoWinner }
