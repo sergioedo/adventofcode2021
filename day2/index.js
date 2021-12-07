@@ -23,7 +23,7 @@ const pilotSubmarineWithAim = (movements) => {
     const finalLocation = movements.reduce((location, movement) => {
         const { move, positions } = movement
         return {
-            aim: location.aim + +(move === 'up' ? -positions : move === 'down' ? positions : 0),
+            aim: location.aim + (move === 'up' ? -positions : move === 'down' ? positions : 0),
             hPosition: location.hPosition + (move === 'forward' ? positions : 0),
             depth: location.depth + (move === 'forward' ? location.aim * positions : 0)
         }
