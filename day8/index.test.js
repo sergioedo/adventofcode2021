@@ -11,7 +11,7 @@ test('basic - count unique segments numbers', () => {
     expect(countUniqueSegmentsNumbers(outputValues)).toBe(expected)
 })
 
-test('complete solution - cheapest crabs alignment fuel incremental costs', () => {
+test('complete solution - count unique segments numbers', () => {
     const outputValues = fs.readFileSync('input.txt', 'UTF-8')
         .split('\n')
         .map(line => line.split('|')[1].trim())
