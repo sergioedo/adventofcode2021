@@ -44,4 +44,12 @@ const countOctopusFlashes = (octopuses, steps) => {
     return flashesCount + nextFlashesCount
 }
 
-module.exports = { countOctopusFlashes }
+const firstSyncedFlashesStep = (octopuses, step = 0) => {
+    const syncedFlashes = octopuses.map(row => row.filter(octo => octo !== 0)).flat().length === 0
+    if (syncedFlashes) return step
+
+    const updatedOctopuses = updateOctopusesEnergy(octopuses)
+    return firstSyncedFlashesStep(updatedOctopuses, step + 1)
+}
+
+module.exports = { countOctopusFlashes, firstSyncedFlashesStep }
