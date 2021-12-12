@@ -1,19 +1,25 @@
-const findPaths = (nodeEdges, start, end) => {
-    if (start === end) return [[end]]
-    const nodeEdgesUpdated = Object.keys(nodeEdges).reduce((newNodeEdges, node) => {
-        newNodeEdges[node] = nodeEdges[node].filter(destination => {
-            if (start === start.toLowerCase() && destination === start) return false
-            return true
-        })
-        return newNodeEdges
-    }, {})
-    const subPaths = nodeEdges[start].map(destination => {
-        return findPaths(nodeEdgesUpdated, destination, end)
-    })
-        .filter(paths => paths.filter(path => path.length !== 0))
-        .map(paths => paths.map(path => [start, ...path]))
-        .flat()
+const checkNoRepeatSmallCaves = (path) => {
+    if (path.length === 0) return false
+    const countSmallCaves = path.filter(node => node === node.toLowerCase())
+        .reduce((smallCounter, cave) => {
+            smallCounter[cave] = (smallCounter[cave] || 0) + 1
+            return smallCounter
+        }, {})
+    return (Object.values(countSmallCaves).filter(count => count > 1).length) === 0
+}
 
+const findPaths = (nodeEdges, inputPath, end, checkValidPath) => {
+    const lastNode = inputPath.slice(-1)[0]
+    if (lastNode === end) return [inputPath]
+
+    const subPaths = nodeEdges[lastNode].map(destination => {
+        const nextPath = [...inputPath, destination]
+        if (checkValidPath(nextPath)) {
+            return findPaths(nodeEdges, nextPath, end, checkValidPath)
+        } else {
+            return []
+        }
+    }).flat()
     return subPaths
 }
 
@@ -22,12 +28,14 @@ const findCavePaths = (connections) => {
         const origin = connection.split('-')[0]
         const destination = connection.split('-')[1]
         nodes[origin] = [destination, ...(nodes[origin] || [])]
-        nodes[destination] = [origin, ...(nodes[destination] || [])]
+        if (origin !== 'start' && destination !== 'end') nodes[destination] = [origin, ...(nodes[destination] || [])]
         return nodes
     }, {})
-    nodeEdges.end = []
-
-    return findPaths(nodeEdges, 'start', 'end').length
+    return findPaths(nodeEdges, ['start'], 'end', checkNoRepeatSmallCaves).length
 }
 
-module.exports = { findCavePaths }
+const findCavePathsWitHException = (connections) => {
+    return connections
+}
+
+module.exports = { findCavePaths, findCavePathsWitHException }
