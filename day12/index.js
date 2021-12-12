@@ -23,19 +23,33 @@ const findPaths = (nodeEdges, inputPath, end, checkValidPath) => {
     return subPaths
 }
 
-const findCavePaths = (connections) => {
-    const nodeEdges = connections.reduce((nodes, connection) => {
+const getNodeEdges = (connections) => {
+    return connections.reduce((nodes, connection) => {
         const origin = connection.split('-')[0]
         const destination = connection.split('-')[1]
-        nodes[origin] = [destination, ...(nodes[origin] || [])]
+        if (destination !== 'start' && origin !== 'end') nodes[origin] = [destination, ...(nodes[origin] || [])]
         if (origin !== 'start' && destination !== 'end') nodes[destination] = [origin, ...(nodes[destination] || [])]
         return nodes
     }, {})
-    return findPaths(nodeEdges, ['start'], 'end', checkNoRepeatSmallCaves).length
 }
 
-const findCavePathsWitHException = (connections) => {
-    return connections
+const findCavePaths = (connections) => {
+    return findPaths(getNodeEdges(connections), ['start'], 'end', checkNoRepeatSmallCaves).length
 }
 
-module.exports = { findCavePaths, findCavePathsWitHException }
+const checkOnlyRepeatOneSmallCave = (path) => {
+    if (path.length === 0) return false
+    const countSmallCaves = path.filter(node => node === node.toLowerCase())
+        .reduce((smallCounter, cave) => {
+            smallCounter[cave] = (smallCounter[cave] || 0) + 1
+            return smallCounter
+        }, {})
+    const repeatedSmallCaves = Object.values(countSmallCaves).filter(count => count > 1)
+    return repeatedSmallCaves.length === 0 || (repeatedSmallCaves.length === 1 && repeatedSmallCaves[0] === 2)
+}
+
+const findCavePathsWithException = (connections) => {
+    return findPaths(getNodeEdges(connections), ['start'], 'end', checkOnlyRepeatOneSmallCave).length
+}
+
+module.exports = { findCavePaths, findCavePathsWithException }
