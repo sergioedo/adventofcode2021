@@ -108,4 +108,29 @@ const sumUpVersionNumbers = (input) => {
     return sumUpPacketVersions(packet)
 }
 
-module.exports = { sumUpVersionNumbers, parsePacket, hex2Bin }
+const getPacketValue = (packet) => {
+    if (packet.type === 4) {
+        return packet.value
+    } else if (packet.type === 0) {
+        return packet.value.reduce((acc, p) => acc + getPacketValue(p), 0)
+    } else if (packet.type === 1) {
+        return packet.value.reduce((acc, p) => acc * getPacketValue(p), 1)
+    } else if (packet.type === 2) {
+        return Math.min(...packet.value.map(p => getPacketValue(p)))
+    } else if (packet.type === 3) {
+        return Math.max(...packet.value.map(p => getPacketValue(p)))
+    } else if (packet.type === 5) {
+        return getPacketValue(packet.value[0]) > getPacketValue(packet.value[1]) ? 1 : 0
+    } else if (packet.type === 6) {
+        return getPacketValue(packet.value[0]) < getPacketValue(packet.value[1]) ? 1 : 0
+    } else if (packet.type === 7) {
+        return getPacketValue(packet.value[0]) === getPacketValue(packet.value[1]) ? 1 : 0
+    }
+}
+
+const getInputValue = (input) => {
+    const packet = parsePacket(hex2Bin(input))
+    return getPacketValue(packet)
+}
+
+module.exports = { sumUpVersionNumbers, parsePacket, hex2Bin, getInputValue }

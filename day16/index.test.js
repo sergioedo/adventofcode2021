@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { sumUpVersionNumbers, parsePacket, hex2Bin } = require('./index')
+const { sumUpVersionNumbers, parsePacket, hex2Bin, getInputValue } = require('./index')
 
 test('basic - parse literal packet', () => {
     const input = hex2Bin('D2FE28')
@@ -96,4 +96,58 @@ test('complete solution - add up the version numbers in all packets', () => {
     const input = fs.readFileSync('input.txt', 'UTF-8')
     const expected = 947
     expect(sumUpVersionNumbers(input)).toBe(expected)
+})
+
+test('basic 1 - get input sum value', () => {
+    const input = 'C200B40A82'
+    const expected = 3
+    expect(getInputValue(input)).toBe(expected)
+})
+
+test('basic 1 - get input product value', () => {
+    const input = '04005AC33890'
+    const expected = 54
+    expect(getInputValue(input)).toBe(expected)
+})
+
+test('basic 1 - get input min value', () => {
+    const input = '880086C3E88112'
+    const expected = 7
+    expect(getInputValue(input)).toBe(expected)
+})
+
+test('basic 1 - get input max value', () => {
+    const input = 'CE00C43D881120'
+    const expected = 9
+    expect(getInputValue(input)).toBe(expected)
+})
+
+test('basic 1 - get input greater than value', () => {
+    const input = 'F600BC2D8F'
+    const expected = 0
+    expect(getInputValue(input)).toBe(expected)
+})
+
+test('basic 1 - get input less than value', () => {
+    const input = 'D8005AC2A8F0'
+    const expected = 1
+    expect(getInputValue(input)).toBe(expected)
+})
+
+test('basic 1 - get input equals to value', () => {
+    const input = '9C005AC2F8F0'
+    const expected = 0
+    expect(getInputValue(input)).toBe(expected)
+})
+
+test('basic 1 - get input equals to with subpackets value', () => {
+    const input = '9C0141080250320F1802104A08'
+    const expected = 1
+    expect(getInputValue(input)).toBe(expected)
+})
+
+test('complete solution - get input expression value', () => {
+    const input = fs.readFileSync('input.txt', 'UTF-8')
+    const expected = 660797830937
+    expect(getInputValue(input)).toBe(expected)
 })
