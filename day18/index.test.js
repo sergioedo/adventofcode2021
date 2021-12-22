@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { addition, explode, split, finalSum, finalSumMagnitude } = require('./index')
+const { addition, explode, split, finalSum, finalSumMagnitude, maxMagnitudeSum } = require('./index')
 
 test('basic addition', () => {
     const input1 = '[[[[4,3],4],4],[7,[[8,4],9]]]'
@@ -62,7 +62,7 @@ test('basic - final sum 3', () => {
     expect(finalSum(input)).toBe(expected)
 })
 
-test('basic 4 - final sum magnitude', () => {
+test('basic - final sum magnitude', () => {
     const input = fs.readFileSync('input-basic2.txt', 'UTF-8').split('\n')
     const expected = 4140
     expect(finalSumMagnitude(input)).toBe(expected)
@@ -72,4 +72,16 @@ test('complete solution - final sum magnitude', () => {
     const input = fs.readFileSync('input.txt', 'UTF-8').split('\n')
     const expected = 4033
     expect(finalSumMagnitude(input)).toBe(expected)
+})
+
+test('basic - max magnitude sum', () => {
+    const input = fs.readFileSync('input-basic2.txt', 'UTF-8').split('\n')
+    const expected = 3993
+    expect(maxMagnitudeSum(input)).toBe(expected)
+})
+
+test('complete solution - max magnitude sum', () => {
+    const input = fs.readFileSync('input.txt', 'UTF-8').split('\n')
+    const expected = 4864
+    expect(maxMagnitudeSum(input)).toBe(expected)
 })

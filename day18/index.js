@@ -146,4 +146,18 @@ const finalSumMagnitude = (inputs) => {
     return sumMagnitude(JSON.parse(finalSum(inputs)))
 }
 
-module.exports = { addition, explode, split, finalSum, finalSumMagnitude }
+const maxMagnitudeSum = (inputs) => {
+    let maxMagnitude = -Infinity
+    for (let i = 0; i < inputs.length; i++) {
+        const firstNumber = inputs[i]
+        for (let j = i + 1; j < inputs.length; j++) {
+            const secondNumber = inputs[j]
+            const magnitude = finalSumMagnitude([firstNumber, secondNumber])
+            const reversedMagnitude = finalSumMagnitude([secondNumber, firstNumber])
+            maxMagnitude = Math.max(maxMagnitude, magnitude, reversedMagnitude)
+        }
+    }
+    return maxMagnitude
+}
+
+module.exports = { addition, explode, split, finalSum, finalSumMagnitude, maxMagnitudeSum }
